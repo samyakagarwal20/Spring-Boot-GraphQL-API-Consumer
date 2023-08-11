@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Book {
+public class Book{
 
     @JsonProperty(value = "id")
     private Integer id;
