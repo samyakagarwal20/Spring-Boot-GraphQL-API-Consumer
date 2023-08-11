@@ -1,5 +1,15 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   application:
-    name: SPRING-BOOT-REST-API-CONSUMER
+    name: SPRING-BOOT-GRAPHQL-API-CONSUMER
+restTemplate:
+  connectionTimeout: 0
+  readTimeout: 0
+producer:
+  api:
+    url: http://localhost:8080/graphql
+graphqlQueries:
+  findAllBooks: findAllBooks { 
+                    id    title   isbn   pageCount    author { id    firstName    lastName }
+                }
