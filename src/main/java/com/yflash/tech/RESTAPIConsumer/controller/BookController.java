@@ -2,6 +2,7 @@ package com.yflash.tech.RESTAPIConsumer.controller;
 
 import com.yflash.tech.RESTAPIConsumer.model.out.Book;
 import com.yflash.tech.RESTAPIConsumer.service.BookService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,13 @@ public class BookController {
     BookService bookService;
 
     @GetMapping(value = "/get-all-books", produces = "application/json")
-    ResponseEntity<List<Book>> getAllBooks() {
-        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+    ResponseEntity<List<Book>> getAllBooks(HttpServletRequest request) {
+        long start = System.currentTimeMillis();
+        LOGGER.info("Intercepted request for {}", request.getRequestURL());
+        ResponseEntity<List<Book>> response = new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
+        long end = System.currentTimeMillis();
+        LOGGER.info("Time taken to fetch the response (in milliseconds) : {}",(end - start));
+        return response;
     }
 
 }

@@ -37,12 +37,18 @@ public class BookServiceImpl implements BookService {
         List<Book> result = null;
         GraphqlQueryResponse graphqlQueryResponse = null;
         try {
+            LOGGER.info("Preparing the request ...");
             String wsUrl = environment.getProperty("producer.api.url");
+
+            LOGGER.info("\t|--- Setting up the headers");
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.setContentType(MediaType.valueOf("application/graphql"));
 
+            LOGGER.info("\t|--- Setting up the request body");
             HttpEntity<?> graphqlEntity = new HttpEntity<>(fetchQuery(), headers);
+
+            LOGGER.info("Fetching books data ...");
             ResponseEntity<GraphqlQueryResponse> response = restTemplate.exchange(Objects.requireNonNull(wsUrl), HttpMethod.POST, graphqlEntity, GraphqlQueryResponse.class);
 
             if(response.getBody() != null) {
