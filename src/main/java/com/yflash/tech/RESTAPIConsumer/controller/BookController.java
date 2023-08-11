@@ -20,8 +20,8 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @PostMapping(value = "/get-all-users", produces = "application/json")
-    ResponseEntity<List<Book>> getAllUsers() {
+    @GetMapping(value = "/get-all-books", produces = "application/json")
+    ResponseEntity<List<Book>> getAllBooks() {
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
 
