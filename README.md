@@ -26,6 +26,7 @@ There are 2 important headers which we need to provide for effective communicati
     * When a client sends data to a server, the Content-Type header specifies the format of the data being sent
     * When the server responds with data, the Content-Type header specifies the format of the data in the response
 
+
 As per this info, we can set these headers as follows in our application when sending the request
 ```
 HttpHeaders headers = new HttpHeaders();
