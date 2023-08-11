@@ -1,8 +1,11 @@
 package com.yflash.tech.RESTAPIConsumer.service.impl;
 
 import com.yflash.tech.RESTAPIConsumer.model.in.GraphqlQueryResponse;
+import com.yflash.tech.RESTAPIConsumer.model.in.GraphqlResponseErrors;
 import com.yflash.tech.RESTAPIConsumer.model.out.Book;
+import com.yflash.tech.RESTAPIConsumer.model.out.BookList;
 import com.yflash.tech.RESTAPIConsumer.service.BookService;
+import com.yflash.tech.RESTAPIConsumer.utils.CommonServiceUtilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -22,19 +27,21 @@ public class BookServiceImpl implements BookService {
     private final Environment environment;
     private final RestTemplate restTemplate;
     private final ModelMapper modelMapper;
+    private final CommonServiceUtilities commonServiceUtilities;
 
     @Autowired
-    public BookServiceImpl(Environment environment, RestTemplate restTemplate, ModelMapper modelMapper) {
+    public BookServiceImpl(Environment environment, RestTemplate restTemplate, ModelMapper modelMapper, CommonServiceUtilities commonServiceUtilities) {
         this.environment = environment;
         this.restTemplate = restTemplate;
         this.modelMapper = modelMapper;
+        this.commonServiceUtilities = commonServiceUtilities;
     }
 
     private static final Logger LOGGER = LogManager.getLogger(BookServiceImpl.class);
 
     @Override
-    public List<Book> getAllBooks() {
-        List<Book> result = null;
+    public BookList getAllBooks() {
+        BookList result = null;
         GraphqlQueryResponse graphqlQueryResponse = null;
         try {
             LOGGER.info("Preparing the request ...");
@@ -52,16 +59,26 @@ public class BookServiceImpl implements BookService {
             ResponseEntity<GraphqlQueryResponse> response = restTemplate.exchange(Objects.requireNonNull(wsUrl), HttpMethod.POST, graphqlEntity, GraphqlQueryResponse.class);
 
             if(response.getBody() != null) {
-                graphqlQueryResponse = response.getBody();
+                graphqlQueryResponse = isErrorAvailable(response.getBody());
             }
 
             if(graphqlQueryResponse != null && graphqlQueryResponse.getErrors() == null) {
-                result = graphqlQueryResponse.getData().getFindAllBooks();
+                List<Book> books = graphqlQueryResponse.getData().getFindAllBooks();
+                result = new BookList(books);
             }
 
         }
+        catch (HttpClientErrorException clientErrorException) {
+            LOGGER.error("Client error occurred with status {} : {}", clientErrorException.getStatusCode().value(), clientErrorException.getMessage());
+            return (BookList) commonServiceUtilities.extractErrMessages(clientErrorException.getMessage(), new BookList());
+        }
+        catch (HttpServerErrorException serverErrorException) {
+            LOGGER.error("Server side error occurred with status {} : {}", serverErrorException.getStatusCode().value(), serverErrorException.getMessage());
+            return (BookList) commonServiceUtilities.extractErrMessages(serverErrorException.getMessage(), new BookList());
+        }
         catch (Exception e) {
             LOGGER.error("Error in getAllBooks() : {}", e.getMessage());
+            return (BookList) commonServiceUtilities.extractErrMessages(e.getMessage(), new BookList());
         }
         return result;
     }
@@ -75,6 +92,22 @@ public class BookServiceImpl implements BookService {
         String queryEnd = "\n}";
         String fetchAllBooksQuery = environment.getProperty("graphqlQueries.findAllBooks");
         return queryStart + fetchAllBooksQuery + queryEnd;
+    }
+
+    /**
+     * The isErrorAvailable() method checks if the GraphQL API response has any errors or not
+     * If yes, then it collects all the error messages and throws an Exception based on them
+     * If no, then simply returns the response body which can be further processed
+     */
+    private GraphqlQueryResponse isErrorAvailable(GraphqlQueryResponse graphqlQueryResponse) throws Exception {
+        List<GraphqlResponseErrors> graphqlResponseErrors = graphqlQueryResponse.getErrors();
+        if(graphqlResponseErrors != null) {
+            StringBuilder errMsg = new StringBuilder();
+            graphqlResponseErrors.forEach(error ->
+                    errMsg.append(error.getMessage()));
+            throw new Exception(errMsg.toString());
+        }
+        return graphqlQueryResponse;
     }
 
 }
