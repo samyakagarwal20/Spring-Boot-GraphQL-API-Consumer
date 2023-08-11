@@ -1,4 +1,4 @@
-package com.yflash.tech.RESTAPIConsumer.common;
+package com.yflash.tech.GraphqlAPIConsumer.common;
 
 public final class CommonConstants {
 

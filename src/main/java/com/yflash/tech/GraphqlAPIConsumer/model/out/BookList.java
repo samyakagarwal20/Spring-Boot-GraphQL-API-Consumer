@@ -1,4 +1,4 @@
-package com.yflash.tech.RESTAPIConsumer.model.out;
+package com.yflash.tech.GraphqlAPIConsumer.model.out;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

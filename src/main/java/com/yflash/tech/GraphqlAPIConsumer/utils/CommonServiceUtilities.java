@@ -1,7 +1,7 @@
-package com.yflash.tech.RESTAPIConsumer.utils;
+package com.yflash.tech.GraphqlAPIConsumer.utils;
 
-import com.yflash.tech.RESTAPIConsumer.model.out.ErrorDetail;
-import com.yflash.tech.RESTAPIConsumer.model.out.ErrorResponse;
+import com.yflash.tech.GraphqlAPIConsumer.model.out.ErrorDetail;
+import com.yflash.tech.GraphqlAPIConsumer.model.out.ErrorResponse;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.stereotype.Service;
 

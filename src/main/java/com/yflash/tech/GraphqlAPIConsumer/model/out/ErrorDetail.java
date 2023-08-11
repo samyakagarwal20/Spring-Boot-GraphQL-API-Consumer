@@ -1,4 +1,4 @@
-package com.yflash.tech.RESTAPIConsumer.model.out;
+package com.yflash.tech.GraphqlAPIConsumer.model.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

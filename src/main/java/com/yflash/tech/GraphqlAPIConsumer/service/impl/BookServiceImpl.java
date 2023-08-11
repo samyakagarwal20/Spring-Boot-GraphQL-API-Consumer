@@ -1,11 +1,11 @@
-package com.yflash.tech.RESTAPIConsumer.service.impl;
+package com.yflash.tech.GraphqlAPIConsumer.service.impl;
 
-import com.yflash.tech.RESTAPIConsumer.model.in.GraphqlQueryResponse;
-import com.yflash.tech.RESTAPIConsumer.model.in.GraphqlResponseErrors;
-import com.yflash.tech.RESTAPIConsumer.model.out.Book;
-import com.yflash.tech.RESTAPIConsumer.model.out.BookList;
-import com.yflash.tech.RESTAPIConsumer.service.BookService;
-import com.yflash.tech.RESTAPIConsumer.utils.CommonServiceUtilities;
+import com.yflash.tech.GraphqlAPIConsumer.model.in.GraphqlQueryResponse;
+import com.yflash.tech.GraphqlAPIConsumer.model.in.GraphqlResponseErrors;
+import com.yflash.tech.GraphqlAPIConsumer.model.out.Book;
+import com.yflash.tech.GraphqlAPIConsumer.model.out.BookList;
+import com.yflash.tech.GraphqlAPIConsumer.service.BookService;
+import com.yflash.tech.GraphqlAPIConsumer.utils.CommonServiceUtilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;

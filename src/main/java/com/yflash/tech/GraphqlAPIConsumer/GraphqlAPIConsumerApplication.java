@@ -1,13 +1,13 @@
-package com.yflash.tech.RESTAPIConsumer;
+package com.yflash.tech.GraphqlAPIConsumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RestapiConsumerApplication {
+public class GraphqlAPIConsumerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RestapiConsumerApplication.class, args);
+		SpringApplication.run(GraphqlAPIConsumerApplication.class, args);
 	}
 
 }

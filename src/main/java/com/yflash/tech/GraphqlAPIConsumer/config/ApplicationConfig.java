@@ -1,4 +1,4 @@
-package com.yflash.tech.RESTAPIConsumer.config;
+package com.yflash.tech.GraphqlAPIConsumer.config;
 
 import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
